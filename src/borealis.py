@@ -2,39 +2,11 @@ from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 
+from cache import lifespan
+from execution import create_execution, list_executions, get_execution, cancel_execution
+
 async def check_borealis(request):
     return JSONResponse(status_code=200, content={"stauts": "ok"})
-
-async def create_execution(request):
-    
-    data = await request.json()
-
-    return JSONResponse(status_code=200, content={"id": "123", "status": "queued"})
-
-async def list_executions(request):
-    
-    return JSONResponse(status_code=200, content={"executions": []})
-
-
-async def get_execution(request):
-    
-    exec_id = request.path_params['id']
-
-    return JSONResponse(
-        status_code=200,
-        content={
-            "id": exec_id,
-            "status": "completed",
-            "stdout": "...",
-        }
-    )
-
-async def cancel_execution(request):
-    
-    exec_id = request.path_params['id']
-
-    return JSONResponse(status_code=200, content={"id": exec_id, "status": "cancelled"})
-
 
 
 borealis_routes = [
@@ -45,4 +17,4 @@ borealis_routes = [
     Route('/executions/{id}', methods=['DELETE'], endpoint=cancel_execution),
 ]
 
-Borealis = Starlette(routes=borealis_routes)
+Borealis = Starlette(routes=borealis_routes, lifespan=lifespan)
