@@ -1,1 +1,1 @@
-jobs = {}   # global dict for in memory data
+# jobs = {}   # global dict for in memory data

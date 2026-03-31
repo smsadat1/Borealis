@@ -1,9 +1,7 @@
+import json
 import os
 import subprocess
 import tempfile
-
-from vars import jobs
-
 
 async def exec_compile(command: str, source_code: str, temp_dir: str):
     
@@ -80,14 +78,27 @@ async def borealis_compiler(language: str, source_code: str):
     return stdout, stderr, exit_code
 
 
-async def run_borealis(exec_id, lang, src_code):
+async def run_borealis(request, exec_id, lang, src_code):
 
-    stdout, stderr, exit_code = await borealis_compiler(language=lang, source_code=src_code)
+    redis = request.app.state.redis
 
-    # save result
-    jobs[exec_id].update({
+    print("Looking for ", f"id:{exec_id}")
+    job_data = await redis.get(f"job:{exec_id}")
+    job = json.loads(job_data)
+
+    job['status'] = 'running'
+    await redis.set(f"job:{exec_id}", json.dumps(job))
+
+    stdout, stderr, exit_code = await borealis_compiler(
+        language=job['language'], source_code=job['source_code']
+    )
+
+    # update result
+    job.update({
         "status": "completed",
         "stdout": stdout,
         "stderr": stderr,
-        "exit_code": exit_code,
+        "exit_code": exit_code
     })
+
+    await redis.set(f"job:{exec_id}", json.dumps(job))
