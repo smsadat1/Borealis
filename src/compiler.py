@@ -4,37 +4,74 @@ import tempfile
 
 from vars import jobs
 
-async def borealis_compiler(language: str, source_code: str):
 
-    temp_dir = tempfile.mkdtemp(prefix="borealis_exec_")
+async def exec_c_cpp(command: str, source_code: str, temp_dir: str):
+    
+    file_path = os.path.join(temp_dir, "main.cpp")
+    with open(file_path, "w") as f:
+        f.write(source_code)
+    
+    compiled_result = subprocess.run(
+        [command, file_path, "-o", os.path.join(temp_dir, "a.out")],
+        capture_output=True, text=True,
+    )
 
-    if language == "c":
-        command = "gcc"
-        file_path = os.path.join(temp_dir, "main.c")
+    if compiled_result.returncode != 0:
+        # compilation failed
+        stdout = compiled_result.stdout
+        stderr = compiled_result.stderr
+    else:
+        # execute binary
+        run_result = subprocess.run(
+            [os.path.join(temp_dir, "a.out")],
+            # input=stdin.encode("utf-8"),
+            capture_output=True, text=True, timeout=5,
+        )
 
-    elif language == "cpp":
-        command = "g++"
-        file_path = os.path.join(temp_dir, "main.cpp")
+    stdout = run_result.stdout
+    stderr = run_result.stderr
+    exit_code = run_result.returncode
 
-    elif language == "python":
-        command = "python3"
-        file_path = os.path.join(temp_dir, "main.py")
+    return stdout, stderr, exit_code
 
 
+async def exec_python(command: str, source_code: str, temp_dir: str):
+    
+    file_path = os.path.join(temp_dir, "main.py")
     with open(file_path, "w") as f:
         f.write(source_code)
 
     result = subprocess.run(
         [command, file_path],
-        capture_output=True,
-        text=True, 
-        timeout=5,
+        capture_output=True, text=True, timeout=5,
     )
 
     stdout = result.stdout
     stderr = result.stderr
     exit_code = result.returncode
 
+    return stdout, stderr, exit_code
+
+
+async def borealis_compiler(language: str, source_code: str):
+
+    temp_dir = tempfile.mkdtemp(prefix="borealis_exec_")
+
+    if language == "c":
+        stdout, stderr, exit_code = await exec_c_cpp(
+            command="gcc", temp_dir=temp_dir, source_code=source_code
+        )
+    
+    elif language == "cpp":
+        stdout, stderr, exit_code = await exec_c_cpp(
+            command="g++", temp_dir=temp_dir, source_code=source_code
+        )
+        
+    elif language == "python":
+        stdout, stderr, exit_code = await exec_python(
+            command="python3", temp_dir=temp_dir, source_code=source_code
+        )
+    
     return stdout, stderr, exit_code
 
 
