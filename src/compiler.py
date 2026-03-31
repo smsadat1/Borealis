@@ -5,7 +5,7 @@ import tempfile
 from vars import jobs
 
 
-async def exec_c_cpp(command: str, source_code: str, temp_dir: str):
+async def exec_compile(command: str, source_code: str, temp_dir: str):
     
     file_path = os.path.join(temp_dir, "main.cpp")
     with open(file_path, "w") as f:
@@ -35,7 +35,7 @@ async def exec_c_cpp(command: str, source_code: str, temp_dir: str):
     return stdout, stderr, exit_code
 
 
-async def exec_python(command: str, source_code: str, temp_dir: str):
+async def exec_interpret(command: str, source_code: str, temp_dir: str):
     
     file_path = os.path.join(temp_dir, "main.py")
     with open(file_path, "w") as f:
@@ -58,18 +58,23 @@ async def borealis_compiler(language: str, source_code: str):
     temp_dir = tempfile.mkdtemp(prefix="borealis_exec_")
 
     if language == "c":
-        stdout, stderr, exit_code = await exec_c_cpp(
+        stdout, stderr, exit_code = await exec_compile(
             command="gcc", temp_dir=temp_dir, source_code=source_code
         )
     
-    elif language == "cpp":
-        stdout, stderr, exit_code = await exec_c_cpp(
+    elif language == "cpp" or language == "c++" or language == "cxx":
+        stdout, stderr, exit_code = await exec_compile(
             command="g++", temp_dir=temp_dir, source_code=source_code
         )
         
-    elif language == "python":
-        stdout, stderr, exit_code = await exec_python(
+    elif language == "python" or language == "py":
+        stdout, stderr, exit_code = await exec_interpret(
             command="python3", temp_dir=temp_dir, source_code=source_code
+        )
+
+    elif language == "javascript" or language == "js":
+        stdout, stderr, exit_code = await exec_interpret(
+            command="node", temp_dir=temp_dir, source_code=source_code
         )
     
     return stdout, stderr, exit_code
