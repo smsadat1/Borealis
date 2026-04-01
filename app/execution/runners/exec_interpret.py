@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-async def exec_interpret(command: str, source_code: str, temp_dir: str):
+async def exec_interpret(command: str, source_code: str, stdin: str, temp_dir: str):
     
     file_path = os.path.join(temp_dir, "main.py")
     with open(file_path, "w") as f:
@@ -9,6 +9,7 @@ async def exec_interpret(command: str, source_code: str, temp_dir: str):
 
     result = subprocess.run(
         [command, file_path],
+        input=stdin,
         capture_output=True, text=True, timeout=5,
     )
 

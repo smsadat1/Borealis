@@ -3,7 +3,7 @@ import redis.asyncio as redis
 from starlette.applications import Starlette
 
 
-REDIS_URL = "redis://localhost:6379"
+REDIS_URL = "redis://borealis-redis:6379"
 
 async def lifespan(app: Starlette):
 

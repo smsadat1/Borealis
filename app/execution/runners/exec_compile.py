@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-async def exec_compile(command: str, source_code: str, temp_dir: str):
+async def exec_compile(command: str, source_code: str, stdin: str, temp_dir: str):
     
     file_path = os.path.join(temp_dir, "main.cpp")
     with open(file_path, "w") as f:
@@ -20,7 +20,7 @@ async def exec_compile(command: str, source_code: str, temp_dir: str):
         # execute binary
         run_result = subprocess.run(
             [os.path.join(temp_dir, "a.out")],
-            # input=stdin.encode("utf-8"),
+            input=stdin,
             capture_output=True, text=True, timeout=5,
         )
 
