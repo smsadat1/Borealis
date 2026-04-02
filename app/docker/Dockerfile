@@ -4,8 +4,10 @@ ENV PYTHONUNBUFFERED=1
 
 # Install dependencies
 
-RUN apt-get update && apt-get install -y build-essential gcc && \
-rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    gcc g++ \
+    nodejs npm \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 COPY / /app/
