@@ -10,7 +10,14 @@ async def create_execution(request):
     
     form = await request.form()
     language = form['language']
-    stdin = form['inputs']
+
+    inputs = form['inputs']
+
+    if hasattr(inputs, 'read'):
+        stdin = (await inputs.read()).decode('utf-8')   # file
+    else:
+        stdin = inputs  # plain text
+
     file = form['file']
     src_code = (await file.read()).decode('utf-8')
 
