@@ -4,7 +4,7 @@ import uuid
 
 from starlette.responses import JSONResponse
 
-from app.execution.runners.base import run_borealis
+from api.connrpc import run_borealis
 
 async def create_execution(request):
     
@@ -38,7 +38,8 @@ async def create_execution(request):
     await redis.set(f"job:{exec_id}", json.dumps(job_data))
     await redis.lpush("queue:executions", exec_id)
 
-    asyncio.create_task(run_borealis(request=request, exec_id=exec_id))
+    asyncio.create_task(run_borealis(
+        request=request, exec_id=exec_id, lang=language, src_code=src_code, stdin=stdin))
 
     return JSONResponse(status_code=200, content={"id": exec_id, "status": "queued"})
 
@@ -53,7 +54,7 @@ async def get_execution(request):
     exec_id = request.path_params['id']
 
     redis = request.app.state.redis
-    job_data = await redis.get(f"job:{exec_id}")
+    job_data = await redis.get(f"exec_id:{exec_id}")
     job_data = json.loads(job_data)
 
     if not job_data:

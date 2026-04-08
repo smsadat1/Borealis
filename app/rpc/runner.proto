@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+service Runner {
+    rpc Execute (ExecutionRequest) returns (ExecutionResponse);
+}
+
+message ExecutionRequest {
+    string language = 1;
+    string source_code = 2;
+    string stdin = 3;
+}
+
+message ExecutionResponse {
+    string stdout = 1;
+    string stderr = 2;
+    int32 exit_code = 3;
+}

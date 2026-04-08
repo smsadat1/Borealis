@@ -1,0 +1,50 @@
+import asyncio
+import json
+from grpc import aio
+
+from rpc import runner_pb2
+from rpc.runner_pb2_grpc import RunnerStub
+
+
+async def run_borealis(request, exec_id, lang, src_code, stdin):
+    
+    redis = request.app.state.redis
+
+    # create async channel
+    async with aio.insecure_channel("runner:50051") as channel:
+        stub = RunnerStub(channel)
+
+        try:
+            # Await the Execute coroutine directly
+            response = await stub.Execute(
+                runner_pb2.ExecutionRequest(
+                    language=lang,
+                    source_code=src_code,
+                    stdin=stdin or ""
+                )
+            )
+
+            job_data = {
+                "id": exec_id,
+                "status": "completed",
+                "stdout": response.stdout,
+                "stderr": response.stderr,
+                "exit_code": response.exit_code
+            }
+
+        except Exception as e:
+            job_data = {
+                "id": exec_id,
+                "status": "failed",
+                "stdout": "",
+                "stderr": str(e),
+                "exit_code": 1
+            }
+
+        # Store result in Redis
+        await redis.set(f"exec_id:{exec_id}", json.dumps(job_data))
+
+        print(f"Running job {exec_id}")
+
+        await redis.set(f"exec_id:{exec_id}", json.dumps(job_data))
+        print(f"[API] Job {exec_id} saved to Redis with status: {job_data['status']}")
