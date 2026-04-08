@@ -1,5 +1,5 @@
 FROM python:3.12-slim 
-WORKDIR /
+WORKDIR /app
 ENV PYTHONUNBUFFERED=1
 
 # Install dependencies
@@ -10,8 +10,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-COPY / /app/
-COPY start.sh /app/start.sh
+COPY api/ ./api/
+COPY rpc/ ./rpc
+COPY setup/ ./setup/
+COPY borealis.py .
+COPY start.sh .
 RUN chmod +x /app/start.sh
 
 RUN pip install --upgrade pip
@@ -20,5 +23,5 @@ RUN ls -R /app
 
 EXPOSE 8000
 
-CMD ["/app/start.sh"]
+CMD ["./start.sh"]
 
