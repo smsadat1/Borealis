@@ -24,8 +24,28 @@ services:
     env_file:
       - .env
     volumes:
+      - /tmp/borealis_jobs:/tmp/borealis_jobs
       - /var/run/docker.sock:/var/run/docker.sock
   
+  exec-c_cpp:
+    build: 
+      context: .
+      dockerfile: docker/languages/Dockerfile.c_cpp
+    image: borealis-exec-c_cpp:latest
+
+  exec-python:
+    build: 
+      context: .
+      dockerfile: docker/languages/Dockerfile.py
+    image: borealis-exec-py:latest
+
+  exec-js:
+    build: 
+      context: .
+      dockerfile: docker/languages/Dockerfile.js
+    image: borealis-exec-js:latest
+
+
   redis:
     container_name: borealis-redis
     image: redis:7 
