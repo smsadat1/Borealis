@@ -8,6 +8,12 @@ async def exec_code(run_cmd: list[str], language: str, stdin: str, temp_dir: str
         "c": "borealis-exec-c_cpp:latest",
         "cpp": "borealis-exec-c_cpp:latest",
         "js": "borealis-exec-js:latest",
+        "java": "borealis-exec-java:latest",
+        "php": "borealis-exec-php:latest",
+        "go": "borealis-exec-go:latest",
+        "rust": "borealis-exec-rust:latest",
+        "c#": "borealis-exec-csharp:latest",
+        "ruby": "borealis-exec-ruby:latest",
     }
 
     docker_cmd = [

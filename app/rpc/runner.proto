@@ -8,10 +8,12 @@ message ExecutionRequest {
     string language = 1;
     string source_code = 2;
     string stdin = 3;
+    string exec_id = 4;
 }
 
 message ExecutionResponse {
     string stdout = 1;
     string stderr = 2;
     int32 exit_code = 3;
+    string exec_id = 4;
 }
