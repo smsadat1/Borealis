@@ -1,14 +1,17 @@
-import asyncio
 import json
 from grpc import aio
 
 from rpc import runner_pb2
 from rpc.runner_pb2_grpc import RunnerStub
 
+from api.ws import send_status
+
 
 async def run_borealis(request, exec_id, lang, src_code, stdin):
     
     redis = request.app.state.redis
+
+    await send_status(exec_id=exec_id, status="Recived")
 
     # create async channel
     async with aio.insecure_channel("runner:50051") as channel:
@@ -20,7 +23,8 @@ async def run_borealis(request, exec_id, lang, src_code, stdin):
                 runner_pb2.ExecutionRequest(
                     language=lang,
                     source_code=src_code,
-                    stdin=stdin or ""
+                    stdin=stdin or "",
+                    exec_id=exec_id,
                 )
             )
 
@@ -43,8 +47,5 @@ async def run_borealis(request, exec_id, lang, src_code, stdin):
 
         # Store result in Redis
         await redis.set(f"exec_id:{exec_id}", json.dumps(job_data))
-
-        print(f"Running job {exec_id}")
-
-        await redis.set(f"exec_id:{exec_id}", json.dumps(job_data))
         print(f"[API] Job {exec_id} saved to Redis with status: {job_data['status']}")
+        await send_status(exec_id=exec_id, status="Done")

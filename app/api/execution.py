@@ -5,6 +5,7 @@ import uuid
 from starlette.responses import JSONResponse
 
 from api.connrpc import run_borealis
+from api.ws import send_status
 
 async def create_execution(request):
     
@@ -34,6 +35,8 @@ async def create_execution(request):
         "exit_code": None
     }
 
+    await send_status(exec_id=exec_id, status="Recived")
+
     redis = request.app.state.redis
     await redis.set(f"job:{exec_id}", json.dumps(job_data))
     await redis.lpush("queue:executions", exec_id)
@@ -51,7 +54,7 @@ async def list_executions(request):
 
 async def get_execution(request):
     
-    exec_id = request.path_params['id']
+    exec_id = request.path_params['exec_id']
 
     redis = request.app.state.redis
     job_data = await redis.get(f"exec_id:{exec_id}")
