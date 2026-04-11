@@ -1,4 +1,4 @@
-# borealis-exec-js
+# borealis-exec-js-node-20
 FROM node:20-slim
 WORKDIR /workspace
 USER 1000:1000

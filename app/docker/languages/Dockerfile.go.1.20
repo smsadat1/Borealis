@@ -1,0 +1,4 @@
+# borealis-exec-go-1.20
+FROM golang:1.20-bookworm-slim
+WORKDIR /workspace
+ENTRYPOINT ["sh", "-c"]

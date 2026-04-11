@@ -1,0 +1,4 @@
+# borealis-exec-rust-1.70
+FROM rust:1.70-slim-bullseye
+WORKDIR /workspace
+ENTRYPOINT ["sh", "-c"]
