@@ -7,11 +7,11 @@ from rpc.runner_pb2_grpc import RunnerStub
 from api.ws import send_status
 
 
-async def run_borealis(request, exec_id, lang, src_code, stdin):
+async def run_borealis(request, exec_id, lang, version, src_code, stdin):
     
     redis = request.app.state.redis
 
-    await send_status(exec_id=exec_id, status="Recived")
+    await send_status(exec_id=exec_id, status="Queued")
 
     # create async channel
     async with aio.insecure_channel("runner:50051") as channel:
@@ -22,11 +22,14 @@ async def run_borealis(request, exec_id, lang, src_code, stdin):
             response = await stub.Execute(
                 runner_pb2.ExecutionRequest(
                     language=lang,
+                    version=version,
                     source_code=src_code,
                     stdin=stdin or "",
                     exec_id=exec_id,
                 )
             )
+
+            await send_status(exec_id=exec_id, status="Running")
 
             job_data = {
                 "id": exec_id,

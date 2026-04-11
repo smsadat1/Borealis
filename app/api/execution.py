@@ -11,6 +11,7 @@ async def create_execution(request):
     
     form = await request.form()
     language = form['language']
+    version = form['version']
 
     inputs = form['inputs']
 
@@ -28,6 +29,7 @@ async def create_execution(request):
         "id": exec_id,
         "status": "queued",
         "language": language,
+        "version": version,
         "source_code": src_code,
         "stdin": stdin,
         "stdout": None,
@@ -42,7 +44,7 @@ async def create_execution(request):
     await redis.lpush("queue:executions", exec_id)
 
     asyncio.create_task(run_borealis(
-        request=request, exec_id=exec_id, lang=language, src_code=src_code, stdin=stdin))
+        request=request, exec_id=exec_id, lang=language, version=version, src_code=src_code, stdin=stdin))
 
     return JSONResponse(status_code=200, content={"id": exec_id, "status": "queued"})
 
