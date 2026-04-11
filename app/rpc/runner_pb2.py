@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0crunner.proto\"Y\n\x10\x45xecutionRequest\x12\x10\n\x08language\x18\x01 \x01(\t\x12\x13\n\x0bsource_code\x18\x02 \x01(\t\x12\r\n\x05stdin\x18\x03 \x01(\t\x12\x0f\n\x07\x65xec_id\x18\x04 \x01(\t\"W\n\x11\x45xecutionResponse\x12\x0e\n\x06stdout\x18\x01 \x01(\t\x12\x0e\n\x06stderr\x18\x02 \x01(\t\x12\x11\n\texit_code\x18\x03 \x01(\x05\x12\x0f\n\x07\x65xec_id\x18\x04 \x01(\t\"\x07\n\x05\x45mpty\"/\n\x0cStatusUpdate\x12\x0f\n\x07\x65xec_id\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t2:\n\x06Runner\x12\x30\n\x07\x45xecute\x12\x11.ExecutionRequest\x1a\x12.ExecutionResponse28\n\rStatusService\x12\'\n\x0cUpdateStatus\x12\r.StatusUpdate\x1a\x06.Empty\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0crunner.proto\"j\n\x10\x45xecutionRequest\x12\x10\n\x08language\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x13\n\x0bsource_code\x18\x03 \x01(\t\x12\r\n\x05stdin\x18\x04 \x01(\t\x12\x0f\n\x07\x65xec_id\x18\x05 \x01(\t\"W\n\x11\x45xecutionResponse\x12\x0e\n\x06stdout\x18\x01 \x01(\t\x12\x0e\n\x06stderr\x18\x02 \x01(\t\x12\x11\n\texit_code\x18\x03 \x01(\x05\x12\x0f\n\x07\x65xec_id\x18\x04 \x01(\t2:\n\x06Runner\x12\x30\n\x07\x45xecute\x12\x11.ExecutionRequest\x1a\x12.ExecutionResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,15 +32,9 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'runner_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_EXECUTIONREQUEST']._serialized_start=16
-  _globals['_EXECUTIONREQUEST']._serialized_end=105
-  _globals['_EXECUTIONRESPONSE']._serialized_start=107
-  _globals['_EXECUTIONRESPONSE']._serialized_end=194
-  _globals['_EMPTY']._serialized_start=196
-  _globals['_EMPTY']._serialized_end=203
-  _globals['_STATUSUPDATE']._serialized_start=205
-  _globals['_STATUSUPDATE']._serialized_end=252
-  _globals['_RUNNER']._serialized_start=254
-  _globals['_RUNNER']._serialized_end=312
-  _globals['_STATUSSERVICE']._serialized_start=314
-  _globals['_STATUSSERVICE']._serialized_end=370
+  _globals['_EXECUTIONREQUEST']._serialized_end=122
+  _globals['_EXECUTIONRESPONSE']._serialized_start=124
+  _globals['_EXECUTIONRESPONSE']._serialized_end=211
+  _globals['_RUNNER']._serialized_start=213
+  _globals['_RUNNER']._serialized_end=271
 # @@protoc_insertion_point(module_scope)

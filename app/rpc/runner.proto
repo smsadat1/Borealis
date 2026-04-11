@@ -6,9 +6,10 @@ service Runner {
 
 message ExecutionRequest {
     string language = 1;
-    string source_code = 2;
-    string stdin = 3;
-    string exec_id = 4;
+    string version = 2;
+    string source_code = 3;
+    string stdin = 4;
+    string exec_id = 5;
 }
 
 message ExecutionResponse {
