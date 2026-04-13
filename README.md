@@ -1,42 +1,69 @@
 # Borealis
 
-Borealis is a secure, multi-language online code execution system built with **Starlette**.  
-It allows users to submit code in **C, C++, and Python**, run it in isolated sandboxed environments, and receive **real-time output** via WebSockets.  
-Inspired by Half-Life 2’s mysterious research labs, Borealis combines safe execution, live streaming, and a clean REST API for modern coding experimentation.
+A distributed, multi language secure code execution platform using isolated containerized runtimes with strict resource control.
 
----
 
-## Features
+## What it does
 
-- Run C, C++, and Python code safely
-- Restrict standard libraries and disable internet access
-- Real-time output streaming via WebSocket
-- Job history and status management
-- Async and scalable with Starlette
+ - Executes untrusted code in isolated environments.
+ - Supports multiple languages and versions.
+ - Enforces strict CPU, memory and time limits
+ - Provides real-time execution status streaming
+ - Exposes a clean API and CLI
 
----
 
-## API Endpoints
+## System overview
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST   | `/executions` | Submit new code execution job |
-| GET    | `/executions` | Get history of executions |
-| GET    | `/executions/{id}` | Get execution result |
-| DELETE | `/executions/{id}` | Cancel execution |
-| WS     | `/executions/{id}/stream` | Stream real-time stdout/stderr |
+Borealis is composed of three core services:
 
----
+ - APIService -> request handling and orchestration 
+ - AuthService -> authentication and API key management
+ - RunnerService -> isolated code execution engine
 
-## Example Request
+Execution flow: 
 
-**Submit a Python job:**
+  ` Client -> APIService -> AuthService -> RunnerService -> Sandbox (gVisor) `
 
-```bash
-curl -X POST http://localhost:8000/executions \
-  -H "Content-Type: application/json" \
-  -d '{
-        "language": "python",
-        "source_code": "print(\"Hello, Borealis!\")",
-        "stdin": ""
-      }'
+## Key Capabilites
+
+  - Multi-language execution (Python, C/C++, Go, Java)
+  - Versioned runtime support (e.g. Python 3.10 C++17 Go 1.22 )
+  - Secure sandboxed execution using gVisor
+  - Websocket based execution status streaming
+  - Exection history and cancellation support
+
+
+## Example 
+
+  - Submit code: `POST /execute/`
+  - Execution result: `GET /execution/{exec_id}`
+  - Cancel execution: `DELETE /execution/{exec_id}`
+  - Live updates: `/execute/{exec_id}/stream`
+
+  <!-- add images here   -->
+
+
+## Design Philosophy
+
+Borealis is designed around isolation, predictability and reproducability when executing untrusted code.
+
+The system prioritizes:
+  - strong runtime isolation
+  - determinstic execution environments
+  - clear separation of concerns across services
+
+
+## Documentation
+
+Detailed technical documentation is available in `/docs`:
+
+  - Architecture -> `docs/architecture.md`
+  - Execution engine -> `docs/runner.md`
+  - Security model -> `docs/security.md`
+  - API references -> `docs/api.md`
+  - Design decisions -> `docs/design-decisions.md`
+
+
+## Name
+
+Borealis is inspired by the research vessel from *Half Life 2*
