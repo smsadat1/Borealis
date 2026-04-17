@@ -1,4 +1,4 @@
-FROM python:3.12-slim 
+FROM python:3.12-slim
 WORKDIR /app
 ENV PYTHONUNBUFFERED=1
 
@@ -6,17 +6,16 @@ ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y \
     gcc g++ \
-    docker-cli \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-COPY execution/ ./execution/
+COPY auth/ ./auth/
 COPY rpc/ ./rpc
+COPY setup/ ./setup/
+
+COPY startauthservice.sh .
+RUN chmod +x /app/startauthservice.sh
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN ls -R /app
-
-EXPOSE 8000
-
-CMD ["python", "-m", "execution.docker_exec"]

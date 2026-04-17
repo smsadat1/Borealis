@@ -1,4 +1,3 @@
 # borealis-exec-java-11
 FROM eclipse-temurin:11-jdk-jammy
 WORKDIR /workspace
-ENTRYPOINT ["sh", "-c"]

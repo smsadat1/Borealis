@@ -1,4 +1,3 @@
 # borealis-exec-go-1.18
-FROM golang:1.18-bookworm-slim
+FROM golang:1.18-bullseye
 WORKDIR /workspace
-ENTRYPOINT ["sh", "-c"]

@@ -6,21 +6,17 @@ ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y \
     gcc g++ \
+    docker-cli \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-COPY api/ ./api/
+COPY runner/ ./runner/
 COPY rpc/ ./rpc
-COPY setup/ ./setup/
-
-COPY startapiservice.sh .
-RUN chmod +x /app/startapiservice.sh
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN ls -R /app
 
-EXPOSE 8000
+EXPOSE 50051
 
-CMD ["./startapiservice.sh"]
-
+CMD ["python", "-m", "runner.server"]
