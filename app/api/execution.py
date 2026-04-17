@@ -7,6 +7,7 @@ from starlette.responses import JSONResponse
 from api.connrpc import run_borealis
 from api.ws import send_status
 
+
 async def create_execution(request):
     
     form = await request.form()
@@ -46,7 +47,7 @@ async def create_execution(request):
     asyncio.create_task(run_borealis(
         request=request, exec_id=exec_id, lang=language, version=version, src_code=src_code, stdin=stdin))
 
-    return JSONResponse(status_code=200, content={"id": exec_id, "status": "queued"})
+    return JSONResponse(status_code=200, content={"id": exec_id, "status": "Queued"})
 
 
 async def list_executions(request):

@@ -2,19 +2,11 @@ import asyncio
 
 from starlette.websockets import WebSocket
 
-from setup.state import main_loop
-
 active_ws = {}  # {exec_id: set of WebSocket connections}
 last_status = {}
 
-def set_main_loop():
-    global main_loop
-    if main_loop is None:
-        main_loop = asyncio.get_running_loop()
 
 async def borealis_ws_stream(websocket: WebSocket):
-    
-    set_main_loop()
     
     await websocket.accept()
     exec_id = websocket.path_params["exec_id"]
