@@ -54,12 +54,12 @@ Execution flow:
 
 ## Example 
 
-  Get API key and login: `$ borealis auth login`
-  Logout and revoke API key: `$ borealis auth logout`
-  Send code and testcases to run: `$ borealis runner`
-  Get historical record: `$ borealis history`
+  ![Usage example](docs/assets/example.gif)
 
-  <!-- add images here   -->
+  Get API key and login: `$ borealis auth login`
+
+  Send code and testcases to run: `$ borealis runner`
+
 
 
 ## Design Philosophy
