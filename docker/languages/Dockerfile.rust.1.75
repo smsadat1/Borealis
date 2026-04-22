@@ -1,0 +1,3 @@
+# borealis-exec-rust-1.75
+FROM rust:1.75-slim-bullseye
+WORKDIR /workspace

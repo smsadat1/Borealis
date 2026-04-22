@@ -1,0 +1,8 @@
+# borealis-exec-c-cpp
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \ 
+    gcc g++ \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /workspace
+USER 1000:1000
+CMD ["sh"]
