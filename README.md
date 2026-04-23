@@ -9,7 +9,18 @@ A multi-language secure code execution platform using isolated containerized run
 ![Sandbox](https://img.shields.io/badge/isolation-gVisor-red)
 
 
-## Why Borealis exists
+## Table of Contents
+* [About](#about)
+* [Getting Started](#getting-started)
+* [Example Usage](#example-usage)
+* [Design Philosophy](#design-philosophy)
+* [Key Capabilities](#key-capabilities)
+* [Non Goals](#non-goals)
+* [Documentation](#documentation)
+* [Name](#name)
+
+
+## About
 
 Running untrusted code is not just execution — it is a security problem.
 
@@ -22,13 +33,41 @@ Most systems struggle with:
 Borealis solves this by treating code execution as a hardened infrastructure layer rather than a simple runtime task.
 
 
-## What it does
+## Getting Started
 
- - Executes untrusted code in isolated environments.
- - Supports multiple languages and versions.
- - Enforces strict CPU, memory and time limits
- - Provides real-time execution status streaming
- - Exposes a clean API and CLI
+  - Setup CLI
+  ```
+  $ git clone git@github.com:smsadat1/Borealis.git 
+  $ cd Borealis/borealis
+  $ bash build.sh
+  ```
+
+  - Setup server (self-host)
+  ```
+  $ cd Borealis
+  $ bash scripts/buildimages.sh
+  $ docker compose build --parallel && docker compose up
+  ```
+
+
+## Example Usage
+
+  ![Usage example](docs/assets/example.gif)
+
+  Get API key and login: `$ borealis auth login`
+
+  Send code and testcases to run: `$ borealis runner`
+
+
+
+## Design Philosophy
+
+Borealis is designed around isolation, predictability and reproducibility when executing untrusted code.
+
+The system prioritizes:
+  - strong runtime isolation
+  - deterministic execution environments
+  - clear separation of concerns across services
 
 
 ## System overview
@@ -51,25 +90,6 @@ Execution flow:
   - Websocket based execution status streaming
   - Historical records of executions with timestamps
 
-
-## Example 
-
-  ![Usage example](docs/assets/example.gif)
-
-  Get API key and login: `$ borealis auth login`
-
-  Send code and testcases to run: `$ borealis runner`
-
-
-
-## Design Philosophy
-
-Borealis is designed around isolation, predictability and reproducibility when executing untrusted code.
-
-The system prioritizes:
-  - strong runtime isolation
-  - deterministic execution environments
-  - clear separation of concerns across services
 
 
 ## Non-Goals
